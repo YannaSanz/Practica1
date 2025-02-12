@@ -1,0 +1,57 @@
+﻿@page "/"
+@using Domain.Dto
+@rendermode InteractiveServer
+<PageTitle>Home</PageTitle>
+
+<div class="Card-header">
+	<div class="card-body">
+		<label class="name">Marca del vehiculo:</label>
+		<input @bind="vehiculos.Marca" type="text" placeholder="Agregar Marca" />
+
+		<label class="name">Modelo del Vehiculo:</label>
+		<input @bind="vehiculos.Modelo" type="text" placeholder="Modelo" /><br />
+
+		<label class="name">Año del vehiculo:</label>
+		<input @bind="vehiculos.Año" type="text" placeholder="Año del vehiculo" /><br />
+
+		<span class="btn btn-primary" @onclick="Agregar">Agregar a la lista</span>
+	</div>
+</div>
+
+<h2>Vehiculos disponibles:</h2>
+
+<div class="card-body">
+		<ul>
+			@if(Vehicles.Any())
+			{
+			foreach (var Vehiculos in Vehicles)
+			{
+				<Practica1.Components.Shared.ListView vehiculo="Vehiculos" Delete="()=>Eliminar(Vehiculos.Id)"/>
+			}
+			}
+		</ul>
+	</div>
+
+@code {
+	public ClassVehicle vehiculos { get; set; } = new();
+	public List<ClassVehicle> Vehicles {get; set;} = [];
+
+	void Agregar()
+	{
+		vehiculos.Id = Vehicles.Any() ? Vehicles.Max(v => v.Id) + 1 : 1;
+		Vehicles.Add(vehiculos);
+		vehiculos = new();
+		StateHasChanged();
+	}
+
+	void Eliminar(int Id)
+	{
+		var Vehiculo = Vehicles.FirstOrDefault(v => v.Id == Id);
+		if (Vehiculo != null)
+		{
+			Vehicles.Remove(Vehiculo);
+			StateHasChanged();
+		}
+	}
+
+}

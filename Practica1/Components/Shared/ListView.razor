@@ -1,0 +1,23 @@
+﻿@using Domain.Dto
+<h3>ListView</h3>
+
+<div class="card">
+	@($" {vehiculo.Marca} - {vehiculo.Modelo} - {vehiculo.Año}")
+	<span class="btn btn-danger" @onclick="EliminarArticulo">Eliminar</span>
+</div>
+
+@code {
+	[Parameter]
+	public ClassVehicle vehiculo { get; set; } = null!;
+	[Parameter]
+	public EventCallback<int> Delete { get; set; }
+
+	private async Task EliminarArticulo()
+	{
+		if (Delete.HasDelegate)
+		{
+			await Delete.InvokeAsync(vehiculo.Id);
+		}
+	}
+
+}
